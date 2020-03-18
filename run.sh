@@ -26,6 +26,13 @@ then
     PURE_FTPD_FLAGS="$PURE_FTPD_FLAGS --tls=1 "
 fi
 
+# copy existing cert generate from let's encrypt
+if [ ! -z $CERT_HOST ] && [ ! -z $VOLUME_NAME ]
+then
+    cp /$VOLUME_NAME/$CERT_HOST/cert.pem /etc/ssl/private/pure-ftpd.pem
+    chmod 600 /etc/ssl/private/*.pem
+fi
+
 # If TLS flag is set and no certificate exists, generate it
 if [ ! -e /etc/ssl/private/pure-ftpd.pem ] && [[ "$PURE_FTPD_FLAGS" == *"--tls"* ]] && [ ! -z "$TLS_CN" ] && [ ! -z "$TLS_ORG" ] && [ ! -z "$TLS_C" ]
 then
